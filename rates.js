@@ -34,7 +34,7 @@ document.getElementById('chooseDate').onchange = function() {
 document.getElementById('search').onkeyup = function(event) {
     let searchValue = event.currentTarget.value.toLowerCase().trim();
     let filteredRates = rates.filter(function(rate){
-        return rate.name.toLowerCase().includes(searchValue);
+        return rate.txt.toLowerCase().includes(searchValue);
     })
     render(filteredRates);
 }
@@ -43,9 +43,9 @@ function render(rates) {
     const htmlStr = rates.reduce(function(acc, rate, index) {
         return acc + `<tr>
                     <td>${index + 1}</td>
-                    <td>${rate.name}</td>
+                    <td>${rate.txt}</td>
                     <td>${rate.rate}</td>
-                    <td>${rate.code}</td>
+                    <td>${rate.r030}</td>
                     <td>${rate.cc}</td>
                 </tr>`;
     }, '');
@@ -56,14 +56,7 @@ function getRates(currentDate) {
     fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date=' + currentDate + '&json').then(function (data){
         return data.json();
     }).then(function(data) {
-        rates = data.map(function(rate){
-                return {
-                    name: rate.txt,
-                    rate: rate.rate,
-                    code: rate.r030,
-                    cc: rate.cc
-                };
-        });
+        rates = data;
         render(rates);
     });
 }
